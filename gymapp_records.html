@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stored Exercise Records</title>
+</head>
+<body>
+    <h1>Stored Exercise Records</h1>
+    <div id="exerciseRecords"></div>
+
+    <script>
+        // Load exercise records from local storage
+        const storedRecords = localStorage.getItem('exerciseRecords');
+        if (storedRecords) {
+            const exerciseRecords = JSON.parse(storedRecords);
+            const exerciseRecordsDiv = document.getElementById('exerciseRecords');
+
+            exerciseRecords.forEach(record => {
+                const recordElement = document.createElement('div');
+                recordElement.innerHTML = `
+                    <p><strong>Exercise:</strong> ${record.exercise}</p>
+                    <p><strong>Sets:</strong> ${record.sets}</p>
+                    <p><strong>Reps:</strong> ${record.reps}</p>
+                    <p><strong>Date:</strong> ${record.date}</p>
+                    <hr>
+                `;
+                exerciseRecordsDiv.appendChild(recordElement);
+            });
+        } else {
+            const exerciseRecordsDiv = document.getElementById('exerciseRecords');
+            exerciseRecordsDiv.textContent = "No exercise records found.";
+        }
+    </script>
+</body>
+</html>

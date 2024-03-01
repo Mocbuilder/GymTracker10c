@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #workout {
+            margin: 20px;
+        }
+        button {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="workout">
+        <h2>Aktuelles Workout</h2>
+        <div id="exercise">
+            <p><strong>Übung:</strong> Aufwärmen/Cardio</p>
+            <p><strong>Sets:</strong> 1</p>
+            <p><strong>Reps:</strong> 1</p>
+        </div>
+        <button onclick="recordSetsReps()">Sets/Reps Aufzeichnen</button>
+        <button onclick="nextExercise() + recordSetsReps()">Nächste Übung</button>
+    </div>
+
+    <script>
+        const workoutPlan = [
+            { exercise: "Aufwärmen/Cardio", sets: 1, reps: 1 },
+            { exercise: "Beinpresse", sets: 4, reps: 15 },
+            { exercise: "Ausfallschritte", sets: 2, reps: 20 },
+            { exercise: "Brustpresse", sets: 3, reps: 15 },
+            { exercise: "Butterfly", sets: 3, reps: 15 },
+            { exercise: "Klimmzüge", sets: 3, reps: 15 },
+            { exercise: "Rudern", sets: 3, reps: 15 },
+            { exercise: "Bizeps", sets: 3, reps: 12 },
+            { exercise: "Trizeps", sets: 3, reps: 12 },
+            { exercise: "Crunch", sets: 4, reps: 25 },
+            { exercise: "Rope", sets: 6, reps: 20 },
+            { exercise: "Dehnen", sets: 1, reps: 1 },
+        ];
+
+        let currentExerciseIndex = 0;
+        let exerciseRecords = [];
+
+        // Load exercise records from local storage
+        const storedRecords = localStorage.getItem('exerciseRecords');
+        if (storedRecords) {
+            exerciseRecords = JSON.parse(storedRecords);
+        }
+
+        function recordSetsReps() {
+            let sets = prompt("Wie viele Sätze hast du gemacht?");
+            let reps = prompt("Wie viele Wiederholungen pro Satz?");
+            
+            // Check if the user entered "all" for sets or reps
+            if (sets && sets.toLowerCase() === "all") {
+                sets = workoutPlan[currentExerciseIndex].sets;
+            }
+            if (reps && reps.toLowerCase() === "all") {
+                reps = workoutPlan[currentExerciseIndex].reps;
+            }
+            
+            if (sets !== null && reps !== null) {
+                const date = new Date().toLocaleDateString();
+                const exercise = workoutPlan[currentExerciseIndex].exercise;
+                const record = { exercise, sets, reps, date };
+                exerciseRecords.push(record);
+                saveExerciseRecords();
+                nextExercise();
+            }
+        }
+
+        function nextExercise() {
+            currentExerciseIndex++;
+            if (currentExerciseIndex < workoutPlan.length) {
+                displayExercise(workoutPlan[currentExerciseIndex]);
+            } else {
+                alert("Glückwunsch! Du hast dein Workout abgeschlossen.");
+                currentExerciseIndex = 0;
+            }
+        }
+
+        function displayExercise(exercise) {
+            const exerciseDiv = document.getElementById("exercise");
+            exerciseDiv.innerHTML = `
+                <p><strong>Übung:</strong> ${exercise.exercise}</p>
+                <p><strong>Sets:</strong> ${exercise.sets}</p>
+                <p><strong>Reps:</strong> ${exercise.reps}</p>
+            `;
+        }
+
+        function saveExerciseRecords() {
+            localStorage.setItem('exerciseRecords', JSON.stringify(exerciseRecords));
+        }
+
+        // Display the initial exercise
+        displayExercise(workoutPlan[currentExerciseIndex]);
+    </script>
+</body>
+</html>
