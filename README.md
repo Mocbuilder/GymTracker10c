@@ -1,2 +1,2 @@
 # Mocbuilder
- Meine GymTracker WebApp. Gehosted auf static.domain unter https://gymtracker.static.domains/
+ Meine GymTracker WebApp. Gehosted auf static.app unter https://gymtracker.static.domains/
